@@ -1,6 +1,7 @@
 package domain
 import data.Purchase
 import data.Product
+import data.ProductClasification
 import repositories.ProductRepository
 import repositories.PurchaseRepository
 import java.util.*
@@ -40,6 +41,28 @@ class StoreController( user:UserController) {
         val c:Calendar = Calendar.getInstance()
         for(cartProduct in cartProductsList){
             val productActions:ProductController = ProductController(cartProduct);
+            val id : Long = purchaseList.getNewId()
+            val userId: Long = this.user.getId()
+            val productId: Long = cartProduct.id
+            val amount: Double = productActions.calcularMontoDeCompra()
+            val createdDate: String = "${c.get(Calendar.YEAR)}/${c.get(Calendar.MONTH)}/${c.get(Calendar.DAY_OF_MONTH)}"
+            purchaseList.add(Purchase(id, userId, productId, amount, createdDate))
+        }
+        this.dropCart()
+    }
+    fun confirmPurchaseWithHierarchy(){
+        val cartProductsList:List<Product> =  user.getShoppingCartInstance().confirmAllProducts();
+        val c:Calendar = Calendar.getInstance()
+        val instanciaProducto : (Product) -> AbstractProductController = { product ->
+            when (product.clasification){
+                ProductClasification.GOLD -> GoldProductController(product)
+                ProductClasification.BRONZE -> BronzeProductController(product)
+                ProductClasification.SILVER -> SilverProductController(product)
+                ProductClasification.PLATINUM ->PlatinumProductController(product)
+            }
+        }
+        for(cartProduct in cartProductsList){
+            val productActions:AbstractProductController = instanciaProducto(cartProduct);
             val id : Long = purchaseList.getNewId()
             val userId: Long = this.user.getId()
             val productId: Long = cartProduct.id

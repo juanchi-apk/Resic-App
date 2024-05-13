@@ -11,14 +11,15 @@ fun main(args: Array<String>) {
     var optionSelected : Int
     do {
         println("---- Menú ----")
-        println("1 . Mostrar Productos")
-        println("2 . Agregar al Carrito")
-        println("3 . Mostrar Carrito De Compras")
-        println("4 . Vaciar Carrito De Compras")
-        println("5 . Eliminar Producto Del Carrito De Compras")
-        println("6.  Confirmar Compra")
-        println("7.  Mis Compras")
-        println("8.  Salir")
+        println("1. Mostrar Productos")
+        println("2. Agregar al Carrito")
+        println("3. Mostrar Carrito De Compras")
+        println("4. Vaciar Carrito De Compras")
+        println("5. Eliminar Producto Del Carrito De Compras")
+        println("6. Confirmar Compra")
+        println("7. Mis Compras")
+        println("8. ConfirmarCompra-MetodoNuevo")
+        println("9.  Salir")
         print("Ingrese su opción: ")
 
         optionSelected = readln().toIntOrNull()?:0
@@ -31,7 +32,8 @@ fun main(args: Array<String>) {
             5 -> storeInstance.dropProductFromCart()
             6 -> storeInstance.confirmPurchase()
             7 -> storeInstance.listAllUserPurchases()
-            8 -> break
+            8 -> storeInstance.confirmPurchaseWithHierarchy()
+            9 -> break
         }
 
     } while (true)
